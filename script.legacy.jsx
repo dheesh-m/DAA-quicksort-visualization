@@ -24,6 +24,7 @@ function parseInputArray(inputValue) {
 function QuickSortApp() {
     const [inputValue, setInputValue] = useState("12,4,19,7,3,15,2,10,8");
     const [bars, setBars] = useState([]);
+    const [arraySize, setArraySize] = useState(14);
     const [speed, setSpeed] = useState(500);
     const [status, setStatus] = useState("Ready.");
     const [isSorting, setIsSorting] = useState(false);
@@ -35,6 +36,7 @@ function QuickSortApp() {
     const sortedRef = useRef(new Set());
     const phaseRef = useRef({ compareA: -1, compareB: -1, pivot: -1, swapA: -1, swapB: -1 });
     const cancelRef = useRef(false);
+    const isPausedRef = useRef(false);
 
     const getHeight = useCallback((value, maxValue) => {
         const safeMax = Math.max(1, maxValue);
@@ -67,7 +69,7 @@ function QuickSortApp() {
     }, [renderFromArray]);
 
     async function pauseGate() {
-        while (isPaused && !cancelRef.current) {
+        while (isPausedRef.current && !cancelRef.current) {
             await sleep(80);
         }
     }
@@ -85,17 +87,38 @@ function QuickSortApp() {
         });
     }
 
-    async function animateLift(indices) {
-        const targets = indices
-            .map((idx) => document.querySelector(`[data-index="${idx}"]`))
-            .filter(Boolean);
-        if (!targets.length) return;
-        await gsap.to(targets, {
-            y: -18,
-            duration: 0.16,
-            yoyo: true,
-            repeat: 1
+    async function animateSwap(i, j) {
+        const first = document.querySelector(`[data-index="${i}"]`);
+        const second = document.querySelector(`[data-index="${j}"]`);
+        if (!first || !second || i === j) return;
+
+        const firstRect = first.getBoundingClientRect();
+        const secondRect = second.getBoundingClientRect();
+        const deltaX = secondRect.left - firstRect.left;
+
+        const tl = gsap.timeline();
+        tl.to([first, second], {
+            y: -20,
+            duration: 0.14,
+            ease: "power2.out"
         });
+        tl.to(first, {
+            x: deltaX,
+            duration: 0.24,
+            ease: "power2.inOut"
+        }, 0.14);
+        tl.to(second, {
+            x: -deltaX,
+            duration: 0.24,
+            ease: "power2.inOut"
+        }, 0.14);
+        tl.to([first, second], {
+            y: 0,
+            duration: 0.14,
+            ease: "power2.in"
+        }, 0.38);
+        tl.set([first, second], { x: 0, clearProps: "transform" });
+        await tl;
     }
 
     async function markCompare(i, j, pivotIdx) {
@@ -111,7 +134,7 @@ function QuickSortApp() {
         phaseRef.current = { compareA: -1, compareB: -1, pivot: pivotIdx, swapA: i, swapB: j };
         refreshBars();
         setStatus(`Swapping ${dataRef.current[i]} and ${dataRef.current[j]}`);
-        await animateLift([i, j]);
+        await animateSwap(i, j);
         await sleep(Math.max(120, Math.floor(speed * 0.45)));
         await pauseGate();
     }
@@ -194,7 +217,7 @@ function QuickSortApp() {
 
     function handleGenerate() {
         if (isSorting) return;
-        const generated = randomArray();
+        const generated = randomArray(arraySize);
         setInputValue(generated.join(", "));
         dataRef.current = [...generated];
         initialSnapshotRef.current = [...generated];
@@ -206,6 +229,7 @@ function QuickSortApp() {
 
     function handleReset() {
         cancelRef.current = true;
+        isPausedRef.current = false;
         setIsSorting(false);
         setIsPaused(false);
         sortedRef.current.clear();
@@ -216,13 +240,17 @@ function QuickSortApp() {
     }
 
     useEffect(() => {
-        const generated = randomArray();
+        const generated = randomArray(arraySize);
         setInputValue(generated.join(", "));
         dataRef.current = [...generated];
         initialSnapshotRef.current = [...generated];
         refreshBars();
         setStatus("Random array generated. Press Start Sorting.");
-    }, [refreshBars]);
+    }, [arraySize, refreshBars]);
+
+    useEffect(() => {
+        isPausedRef.current = isPaused;
+    }, [isPaused]);
 
     useEffect(() => {
         if (!isSorting) return;
@@ -267,14 +295,40 @@ function QuickSortApp() {
                         <div className="col-6 col-md-2 text-md-end">
                             <span className="badge text-bg-dark px-3 py-2">{speed} ms</span>
                         </div>
+                        <div className="col-12 col-md-8">
+                            <label htmlFor="sizeRange" className="form-label">Array size</label>
+                            <input
+                                id="sizeRange"
+                                type="range"
+                                className="form-range"
+                                min="6"
+                                max="40"
+                                step="1"
+                                value={arraySize}
+                                disabled={isSorting}
+                                onChange={(e) => setArraySize(Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="col-12 col-md-4 text-md-end">
+                            <span className="badge text-bg-danger px-3 py-2">{arraySize} bars</span>
+                        </div>
                     </div>
                     <div className="d-flex flex-wrap gap-2 mb-3">
-                        <button className="btn btn-outline-info" disabled={isSorting} onClick={handleGenerate}>Generate Random</button>
-                        <button className="btn btn-info fw-semibold" disabled={isSorting} onClick={handleStartSort}>Start Sorting</button>
-                        <button className="btn btn-outline-warning" disabled={!isSorting} onClick={() => setIsPaused(true)}>Pause</button>
+                        <button className="btn btn-outline-info glass-btn" disabled={isSorting} onClick={handleGenerate}>Generate Random</button>
+                        <button className="btn btn-info fw-semibold glass-btn" disabled={isSorting} onClick={handleStartSort}>Start Sorting</button>
                         <button
-                            className="btn btn-outline-success"
-                            disabled={!isSorting}
+                            className="btn btn-outline-warning glass-btn"
+                            disabled={!isSorting || isPaused}
+                            onClick={() => {
+                                setIsPaused(true);
+                                setStatus("Paused.");
+                            }}
+                        >
+                            Pause
+                        </button>
+                        <button
+                            className="btn btn-outline-success glass-btn"
+                            disabled={!isSorting || !isPaused}
                             onClick={() => {
                                 setIsPaused(false);
                                 setStatus("Resumed.");
@@ -282,7 +336,7 @@ function QuickSortApp() {
                         >
                             Resume
                         </button>
-                        <button className="btn btn-outline-light" onClick={handleReset}>Reset</button>
+                        <button className="btn btn-outline-light glass-btn" onClick={handleReset}>Reset</button>
                     </div>
                     <div className="legend mb-3">
                         <span><i className="dot dot-default"></i> Normal</span>
