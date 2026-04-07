@@ -68,8 +68,8 @@ body {
     min-height: 22px;
     border-radius: 11px;
     border: 1px solid rgba(255, 235, 241, 0.32);
-    background: linear-gradient(180deg, #ff8ca1 0%, #ef446c 100%);
-    box-shadow: 0 12px 22px rgba(239, 68, 108, 0.32);
+    background: linear-gradient(180deg, #3b0008 0%, #1b0004 100%);
+    box-shadow: 0 12px 22px rgba(27, 0, 4, 0.55);
     position: relative;
     transform-origin: center bottom;
     transition: filter 0.2s ease, transform 0.18s ease;
@@ -156,14 +156,14 @@ body {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
     border: 1px solid rgba(255, 225, 233, 0.35);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.28);
-    color: #fff1f4;
+    color: #000000 !important;
 }
 
 .glass-btn:hover:not(:disabled) {
     transform: translateY(-1px);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14));
     border-color: rgba(255, 235, 241, 0.55);
-    color: #ffffff;
+    color: #000000 !important;
 }
 
 .glass-btn:disabled {
@@ -173,14 +173,14 @@ body {
 .btn-info {
     background: linear-gradient(135deg, #ff5578, #d81b50);
     border-color: #ff7894;
-    color: #fff5f7;
+    color: #000000 !important;
 }
 
 .btn-outline-info,
 .btn-outline-warning,
 .btn-outline-success,
 .btn-outline-light {
-    color: #ffe7ee;
+    color: #000000 !important;
 }
 
 .small.text-info,

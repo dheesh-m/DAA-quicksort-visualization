@@ -262,7 +262,7 @@ function QuickSortApp() {
         <div className="container py-4 py-md-5">
             <div className="card app-card mx-auto shadow-lg">
                 <div className="card-body p-4 p-md-5">
-                    <h1 className="display-6 fw-bold mb-3">Quick Sort Visualizer (React)</h1>
+                    <h1 className="display-6 fw-bold mb-3">Quick Sort Visualizer </h1>
                     <p className="text-secondary mb-4">
                         Dynamic state-driven visualization with smooth one-by-one quicksort transitions.
                     </p>
@@ -291,9 +291,6 @@ function QuickSortApp() {
                                 value={speed}
                                 onChange={(e) => setSpeed(Number(e.target.value))}
                             />
-                        </div>
-                        <div className="col-6 col-md-2 text-md-end">
-                            <span className="badge text-bg-dark px-3 py-2">{speed} ms</span>
                         </div>
                         <div className="col-12 col-md-8">
                             <label htmlFor="sizeRange" className="form-label">Array size</label>
