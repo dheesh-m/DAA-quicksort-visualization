@@ -123,14 +123,23 @@ body {
 .form-control {
     background: rgba(255, 255, 255, 0.14);
     border: 1px solid rgba(255, 220, 228, 0.26);
-    color: #fff1f4;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000;
 }
 
 .form-control:focus {
     background: rgba(255, 255, 255, 0.2);
-    color: #fff1f4;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000;
     border-color: rgba(255, 220, 228, 0.5);
     box-shadow: 0 0 0 0.2rem rgba(255, 160, 179, 0.22);
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000;
+    opacity: 1;
 }
 
 .form-label {
