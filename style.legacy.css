@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at top, #1f2b44 0%, #101723 45%, #0b1018 100%);
+    color: #eaf2ff;
+}
+
+.app-card {
+    max-width: 1020px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    background: rgba(18, 27, 41, 0.9);
+    backdrop-filter: blur(4px);
+}
+
+.controls-wrap {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    font-size: 0.95rem;
+    color: #d2dff8;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.dot-default { background: #4ba3ff; }
+.dot-pivot { background: #ff5d73; }
+.dot-compare { background: #ffd166; }
+.dot-swap { background: #cc7bff; }
+.dot-sorted { background: #3fe28f; }
+
+.bars-area {
+    height: 420px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 14px;
+    padding: 14px 12px 10px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+}
+
+.bar {
+    width: min(50px, calc((100% - 40px) / 25));
+    min-width: 18px;
+    border-radius: 8px 8px 4px 4px;
+    background: linear-gradient(180deg, #61beff 0%, #3f86ff 100%);
+    box-shadow: 0 10px 18px rgba(63, 134, 255, 0.24);
+    position: relative;
+    transform-origin: center bottom;
+    transition: filter 0.2s ease;
+}
+
+.bar::after {
+    content: attr(data-value);
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.76rem;
+    color: #eaf2ff;
+}
+
+.bar-pivot {
+    background: linear-gradient(180deg, #ff8a9a 0%, #ff4c66 100%);
+    box-shadow: 0 8px 20px rgba(255, 82, 110, 0.4);
+}
+
+.bar-compare {
+    background: linear-gradient(180deg, #ffe08a 0%, #ffbe2f 100%);
+    box-shadow: 0 8px 20px rgba(255, 190, 47, 0.4);
+}
+
+.bar-swap {
+    background: linear-gradient(180deg, #e1a2ff 0%, #bf64ff 100%);
+    box-shadow: 0 8px 20px rgba(191, 100, 255, 0.42);
+}
+
+.bar-sorted {
+    background: linear-gradient(180deg, #8effc5 0%, #2dcc7a 100%);
+    box-shadow: 0 8px 20px rgba(45, 204, 122, 0.38);
+}
+
+@media (max-width: 768px) {
+    .bars-area {
+        height: 330px;
+        gap: 4px;
+    }
+}
