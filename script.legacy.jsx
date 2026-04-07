@@ -25,7 +25,7 @@ function QuickSortApp() {
     const [inputValue, setInputValue] = useState("12,4,19,7,3,15,2,10,8");
     const [bars, setBars] = useState([]);
     const [arraySize, setArraySize] = useState(14);
-    const [speed, setSpeed] = useState(500);
+    const [speed] = useState(200);
     const [status, setStatus] = useState("Ready.");
     const [isSorting, setIsSorting] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -277,19 +277,6 @@ function QuickSortApp() {
                                 disabled={isSorting}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 placeholder="Example: 5,3,8,1,9"
-                            />
-                        </div>
-                        <div className="col-6 col-md-2">
-                            <label htmlFor="speedRange" className="form-label">Speed</label>
-                            <input
-                                id="speedRange"
-                                type="range"
-                                className="form-range"
-                                min="120"
-                                max="1200"
-                                step="20"
-                                value={speed}
-                                onChange={(e) => setSpeed(Number(e.target.value))}
                             />
                         </div>
                         <div className="col-12 col-md-8">
